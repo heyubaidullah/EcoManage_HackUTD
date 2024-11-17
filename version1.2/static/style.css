@@ -1,0 +1,42 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    height: 100vh;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-link {
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #e9ecef;
+    color: #007bff;
+}
+
+.chart-container canvas {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+}

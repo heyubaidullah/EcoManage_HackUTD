@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBRE EcoManage Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="C:/Users/del028/Downloads/hackutd/duthie_files/static/static/brand-style.css">
+    <link rel="stylesheet" href="C:/Users/del028/Downloads/hackutd/duthie_files/static/style.css">
+    <link rel="icon" href="/static/EM_favicon.png">
+</head>
+
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <img src="/static/CBRE_logo.png" alt="CBRE Logo" class="cbre-logo">
+                <span class="navbar-brand ms-2">EcoManage</span>
+            </div>
+            <div class="dropdown mx-auto">
+                <select class="form-select form-select-lg modern-dropdown" id="building-select">
+                    <!-- Options will be dynamically inserted here -->
+                </select>
+            </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <a href="#"><img src="/static/notification_icon.png" alt="Notifications" class="nav-icon me-3"></a>
+                <a href="#"><img src="/static/settings_icon.png" alt="Settings" class="nav-icon me-3"></a>
+                <a href="#"><img src="/static/profile_icon.png" alt="Profile" class="nav-icon"></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="d-flex">
+        <div class="vertical-nav bg-white" id="sidebar">
+            <div class="p-3 d-flex flex-column align-items-center">
+                <img src="/static/images/CBRE_Downtown.jpg" alt="Building Image" id="building-image" class="building-image">
+                <h5 id="building-name" class="mt-2">CBRE Downtown</h5>
+                <hr class="w-100">
+                <ul class="nav flex-column w-100">
+                    <li class="nav-item"><a href="#" class="nav-link">Dashboard</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Energy Management</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Occupancy</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Waste Management</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Resource Management</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Sustainability Initiatives</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container-fluid" id="main-content">
+            <section class="mt-5 pt-4">
+                <!-- Placeholder cards -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card placeholder-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Building State</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card placeholder-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Efficiency Level</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card placeholder-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Warnings</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="card placeholder-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">HVAC Usage</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card placeholder-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Water Usage</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card placeholder-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Dustbin Levels</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

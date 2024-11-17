@@ -1,0 +1,201 @@
+/* Brand Stylesheet for CBRE EcoManage (brand-style.css) */
+
+/* Importing the font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+/* Base Styles */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #003F2D;
+    background-color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+}
+
+/* Primary and Secondary Colors */
+:root {
+    --primary-color: #003F2D;
+    --secondary-color: #3CA358;
+    --background-color: #FFFFFF;
+    --text-color: #003F2D;
+    --accent-color: #3CA358;
+}
+
+/* Header Styles */
+.header {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.header-quadrant {
+    flex: 1;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.header-dropdown {
+    text-align: center;
+}
+
+.header-icons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.header-icons i {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.header-icons i:hover {
+    color: var(--secondary-color);
+}
+
+/* Button Styles */
+.btn {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--primary-color);
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 100px; /* To accommodate the fixed header */
+    overflow-y: auto;
+}
+
+.sidebar img {
+    width: 80%;
+    margin: 20px auto;
+    display: block;
+    border-radius: 5px;
+}
+
+.sidebar .nav-link {
+    color: var(--background-color);
+    padding: 15px 20px;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Sidebar Building Info */
+.sidebar-building-info {
+    text-align: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.sidebar-building-info img {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.sidebar-building-info .building-name {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Card Styles for Dashboard */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 120px; /* To accommodate the fixed header */
+    margin-left: 270px; /* To accommodate the fixed sidebar */
+}
+
+.card {
+    background-color: var(--background-color);
+    border: 1px solid var(--primary-color);
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Chart Styles */
+.chart-container {
+    background-color: var(--background-color);
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* Footer Styles (if applicable) */
+.footer {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-4 {
+    margin-top: 20px;
+}
+
+.mb-4 {
+    margin-bottom: 20px;
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}

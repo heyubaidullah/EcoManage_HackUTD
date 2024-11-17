@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Building and Daily Data</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/png" href="/static/EM_favicon.png">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">EcoManage</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/add-building">Add Building</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <h4 class="sidebar-heading text-center py-3">Buildings</h4>
+                    <ul class="nav flex-column" id="building-list">
+                        <!-- Building dropdown items will be dynamically inserted here -->
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <section id="add-building" class="py-4">
+                    <h2 class="text-center">Add Building</h2>
+                    <form id="add-building-form" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="buildingName" class="form-label">Building Name</label>
+                            <input type="text" class="form-control" id="buildingName" placeholder="Enter building name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="buildingAddress" class="form-label">Building Address</label>
+                            <input type="text" class="form-control" id="buildingAddress" placeholder="Enter building address" required>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-success">Add Building</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section id="daily-data" class="py-4">
+                    <h2 class="text-center">Add Daily Data</h2>
+                    <form id="daily-data-form" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="dataDate" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="dataDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dataBuilding" class="form-label">Select Building</label>
+                            <select class="form-select" id="dataBuilding" required>
+                                <!-- Building options will be dynamically populated -->
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="energyData" class="form-label">Energy (kWh)</label>
+                            <input type="number" class="form-control" id="energyData" placeholder="Enter value" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="hvacData" class="form-label">HVAC (%)</label>
+                            <input type="number" class="form-control" id="hvacData" placeholder="Enter value" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="temperatureData" class="form-label">Temperature (°C)</label>
+                            <input type="number" class="form-control" id="temperatureData" placeholder="Enter value" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="wasteData" class="form-label">Waste (kg)</label>
+                            <input type="number" class="form-control" id="wasteData" placeholder="Enter value" required>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary">Save Data</button>
+                        </div>
+                    </form>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>
