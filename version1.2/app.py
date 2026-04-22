@@ -113,8 +113,17 @@ def generate_recommendations(avg_energy, avg_hvac, avg_temp, avg_waste):
     elif avg_waste < 7:
         recs.append({'icon': '♻️', 'title': 'Waste Management Leader', 'body': 'This building is a waste reduction leader in your portfolio. Document and replicate these practices across other properties.'})
 
-    if not recs:
-        recs.append({'icon': '🏆', 'title': 'All Systems Optimal', 'body': 'This building is performing within all sustainability targets. Continue current practices and monitor for seasonal variations.'})
+    neutral_pool = [
+        {'icon': '📅', 'title': 'Schedule Quarterly Sustainability Audit', 'body': 'Regular audits help identify hidden inefficiencies. Benchmark against LEED and ENERGY STAR standards to maintain portfolio leadership.'},
+        {'icon': '🏆', 'title': 'All Systems Optimal', 'body': 'This building is performing within all sustainability targets. Continue current practices and monitor for seasonal variations.'},
+        {'icon': '🌱', 'title': 'Explore Renewable Energy Options', 'body': 'Consider evaluating rooftop solar or green energy purchasing agreements to reduce grid dependency and lower carbon footprint further.'},
+        {'icon': '👥', 'title': 'Engage Tenants in Sustainability Goals', 'body': 'Tenant engagement programmes can drive 10–15% additional energy savings. Share this building\'s EcoScore™ with occupants to build shared accountability.'},
+    ]
+
+    while len(recs) < 2:
+        candidate = neutral_pool[len(recs) % len(neutral_pool)]
+        if candidate not in recs:
+            recs.append(candidate)
 
     return recs[:3]
 
@@ -130,17 +139,17 @@ def seed_demo_data():
         db.session.add(building)
         db.session.flush()
 
-        base_energy = random.uniform(110, 170)
+        base_energy = random.uniform(120, 170)
         base_hvac = random.uniform(50, 75)
         base_temp = random.uniform(20, 24)
-        base_waste = random.uniform(6, 13)
+        base_waste = random.uniform(7, 12)
 
         for i in range(90, 0, -1):
             day = today - timedelta(days=i)
-            energy = max(60, base_energy + random.uniform(-25, 25) + math.sin(i / 7) * 10)
-            hvac = max(30, min(95, base_hvac + random.uniform(-12, 12) + math.cos(i / 14) * 8))
-            temp = max(17, min(28, base_temp + random.uniform(-2, 2)))
-            waste = max(3, min(18, base_waste + random.uniform(-3, 3)))
+            energy = max(100, min(200, base_energy + random.uniform(-18, 18) + math.sin(i / 7) * 8))
+            hvac = max(40, min(85, base_hvac + random.uniform(-10, 10) + math.cos(i / 14) * 6))
+            temp = max(18, min(26, base_temp + random.uniform(-2, 2)))
+            waste = max(5, min(15, base_waste + random.uniform(-2.5, 2.5)))
             daily = DailyData(
                 building_id=building.id,
                 date=day,
@@ -327,8 +336,12 @@ def get_alerts(building_id):
     alerts = generate_alerts(last.energy, last.hvac, last.temperature, last.waste)
     return jsonify(alerts)
 
-if __name__ == '__main__':
+def initialize_app():
     with app.app_context():
         db.create_all()
         seed_demo_data()
+
+initialize_app()
+
+if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
