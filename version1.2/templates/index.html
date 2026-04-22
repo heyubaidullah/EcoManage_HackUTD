@@ -1,113 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CBRE EcoManage Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="C:/Users/del028/Downloads/hackutd/duthie_files/static/static/brand-style.css">
-    <link rel="stylesheet" href="C:/Users/del028/Downloads/hackutd/duthie_files/static/style.css">
-    <link rel="icon" href="/static/EM_favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoManage — CBRE Sustainability Dashboard</title>
+  <link rel="icon" href="/static/images/EM_favicon.png">
+  <link rel="stylesheet" href="/static/main.css">
 </head>
-
 <body>
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center">
-                <img src="/static/CBRE_logo.png" alt="CBRE Logo" class="cbre-logo">
-                <span class="navbar-brand ms-2">EcoManage</span>
-            </div>
-            <div class="dropdown mx-auto">
-                <select class="form-select form-select-lg modern-dropdown" id="building-select">
-                    <!-- Options will be dynamically inserted here -->
-                </select>
-            </div>
-            <div class="d-flex justify-content-end align-items-center">
-                <a href="#"><img src="/static/notification_icon.png" alt="Notifications" class="nav-icon me-3"></a>
-                <a href="#"><img src="/static/settings_icon.png" alt="Settings" class="nav-icon me-3"></a>
-                <a href="#"><img src="/static/profile_icon.png" alt="Profile" class="nav-icon"></a>
-            </div>
-        </div>
+
+  <!-- NAVBAR -->
+  <nav class="em-navbar">
+    <a href="/" class="brand">
+      <img src="/static/images/CBRE_logo.png" alt="CBRE" class="logo">
+      <span class="app-name">Eco<span>Manage</span></span>
+    </a>
+    <div class="center-area">
+      <div class="building-select-wrap">
+        <select id="building-select" aria-label="Select Building">
+          <option value="">Loading buildings…</option>
+        </select>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="/" title="Dashboard" class="active-nav-link">⊞</a>
+      <a href="/manage" title="Manage Buildings">⊕</a>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside class="em-sidebar">
+    <div class="sidebar-building-card">
+      <img id="sidebar-img" src="/static/images/CBRE_Downtown.jpg" alt="Building">
+      <div class="sidebar-building-name" id="sidebar-name">CBRE Downtown</div>
+      <div class="sidebar-building-addr" id="sidebar-addr">Loading…</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="/" class="active"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="#section-charts"><span class="nav-icon">📈</span> Trends</a>
+      <a href="#section-portfolio"><span class="nav-icon">🏢</span> Portfolio</a>
+      <a href="#section-alerts"><span class="nav-icon">🔔</span> Alerts</a>
+      <a href="#section-recs"><span class="nav-icon">💡</span> Recommendations</a>
+      <div class="sidebar-section-label">Management</div>
+      <a href="/manage"><span class="nav-icon">⚙️</span> Manage Buildings</a>
     </nav>
+  </aside>
 
-    <!-- Sidebar -->
-    <div class="d-flex">
-        <div class="vertical-nav bg-white" id="sidebar">
-            <div class="p-3 d-flex flex-column align-items-center">
-                <img src="/static/images/CBRE_Downtown.jpg" alt="Building Image" id="building-image" class="building-image">
-                <h5 id="building-name" class="mt-2">CBRE Downtown</h5>
-                <hr class="w-100">
-                <ul class="nav flex-column w-100">
-                    <li class="nav-item"><a href="#" class="nav-link">Dashboard</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Energy Management</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Occupancy</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Waste Management</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Resource Management</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Sustainability Initiatives</a></li>
-                </ul>
-            </div>
-        </div>
+  <!-- MAIN -->
+  <main class="em-main">
 
-        <!-- Main Content -->
-        <div class="container-fluid" id="main-content">
-            <section class="mt-5 pt-4">
-                <!-- Placeholder cards -->
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card placeholder-card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Building State</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card placeholder-card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Efficiency Level</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card placeholder-card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Warnings</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <div class="card placeholder-card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">HVAC Usage</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card placeholder-card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Water Usage</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card placeholder-card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Dustbin Levels</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+    <!-- Page Title -->
+    <div class="page-title-bar">
+      <div>
+        <div class="page-title">Sustainability Dashboard</div>
+        <div class="page-subtitle">Real-time building performance monitoring &amp; analytics</div>
+      </div>
+      <div class="last-updated" id="last-updated-label">—</div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/script.js"></script>
-</body>
+    <!-- KPI CARDS -->
+    <div class="kpi-row" id="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-icon green">🌿</div>
+        <div class="kpi-content">
+          <div class="kpi-label">EcoScore™</div>
+          <div class="kpi-value" id="kpi-score">
+            <span id="score-num">—</span>
+            <span class="grade-badge" id="grade-badge" style="background:#6b7280">—</span>
+          </div>
+          <div class="kpi-sub" id="kpi-score-sub">7-day weighted average</div>
+        </div>
+      </div>
+      <div class="kpi-card carbon-card">
+        <div class="kpi-icon blue">🌍</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Carbon Footprint</div>
+          <div class="kpi-value" id="kpi-carbon">—</div>
+          <div class="kpi-sub">kg CO₂e today (energy + waste)</div>
+        </div>
+      </div>
+      <div class="kpi-card alert-card">
+        <div class="kpi-icon amber">🔔</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Active Alerts</div>
+          <div class="kpi-value" id="kpi-alerts">—</div>
+          <div class="kpi-sub" id="kpi-alerts-sub">Threshold breaches today</div>
+        </div>
+      </div>
+    </div>
 
+    <!-- LATEST STATS -->
+    <div class="stat-row mb-24" id="stat-row">
+      <div class="stat-mini">
+        <div class="stat-mini-label">Energy</div>
+        <div class="stat-mini-value" id="stat-energy">—<span class="stat-mini-unit"> kWh</span></div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-label">HVAC Usage</div>
+        <div class="stat-mini-value" id="stat-hvac">—<span class="stat-mini-unit"> %</span></div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-label">Temperature</div>
+        <div class="stat-mini-value" id="stat-temp">—<span class="stat-mini-unit"> °C</span></div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-label">Waste</div>
+        <div class="stat-mini-value" id="stat-waste">—<span class="stat-mini-unit"> kg</span></div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div id="section-charts">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="section-title">Performance Trends</div>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <div class="metric-toggles" id="metric-toggles">
+              <button class="metric-toggle active" data-metric="energy" style="color:#3CA358">
+                <span class="dot" style="background:#3CA358"></span>Energy
+              </button>
+              <button class="metric-toggle active" data-metric="hvac" style="color:#003F2D">
+                <span class="dot" style="background:#003F2D"></span>HVAC
+              </button>
+              <button class="metric-toggle active" data-metric="temperature" style="color:#f59e0b">
+                <span class="dot" style="background:#f59e0b"></span>Temperature
+              </button>
+              <button class="metric-toggle active" data-metric="waste" style="color:#ef4444">
+                <span class="dot" style="background:#ef4444"></span>Waste
+              </button>
+            </div>
+            <div class="range-tabs" id="range-tabs">
+              <button class="range-tab" data-days="7">7D</button>
+              <button class="range-tab active" data-days="30">30D</button>
+              <button class="range-tab" data-days="90">90D</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="trend-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- TWO COLUMN: Alerts + Recommendations -->
+    <div class="two-col" id="section-alerts">
+      <!-- Alerts -->
+      <div class="alerts-panel">
+        <div class="section-header">
+          <div class="section-title">Active Alerts</div>
+        </div>
+        <div id="alerts-list">
+          <div class="loading-pulse" style="height:16px;margin-bottom:8px;"></div>
+          <div class="loading-pulse" style="height:16px;width:70%;"></div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="recs-card" id="section-recs">
+        <div class="section-header">
+          <div class="section-title">Smart Recommendations</div>
+        </div>
+        <div id="recs-list">
+          <div class="loading-pulse" style="height:60px;margin-bottom:10px;"></div>
+          <div class="loading-pulse" style="height:60px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORTFOLIO -->
+    <div id="section-portfolio" class="mb-24">
+      <div class="section-header">
+        <div class="section-title">Portfolio Overview</div>
+        <span class="last-updated" id="portfolio-count">—</span>
+      </div>
+      <div class="portfolio-grid" id="portfolio-grid">
+        <div class="loading-pulse" style="height:180px;"></div>
+        <div class="loading-pulse" style="height:180px;"></div>
+        <div class="loading-pulse" style="height:180px;"></div>
+        <div class="loading-pulse" style="height:180px;"></div>
+        <div class="loading-pulse" style="height:180px;"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="em-footer">
+    <div class="footer-brand">
+      <div class="footer-product">CBRE EcoManage</div>
+      <div class="footer-tagline">Intelligent Sustainability for the Built World</div>
+    </div>
+    <div class="footer-center">
+      <div class="footer-domain">ecomanage.dynelabs.org</div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-credit">Built by Ubaid &amp; Christina at <a href="https://www.dynelabs.org" target="_blank" rel="noopener">Dyne Labs</a> &copy; 2024</div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="/static/dashboard.js"></script>
+</body>
 </html>
