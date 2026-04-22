@@ -54,12 +54,15 @@ function selectBuilding(id) {
   currentBuildingId = id;
   const b = buildings.find(x => x.id == id);
   if (b) {
-    document.getElementById('sidebar-name').textContent = b.name;
-    document.getElementById('sidebar-addr').textContent = b.address;
-    document.getElementById('sidebar-img').src = `/static/${b.image}`;
-    document.getElementById('sidebar-img').onerror = function() {
-      this.src = '/static/images/CBRE_Downtown.jpg';
-    };
+    const ctxName = document.getElementById('ctx-name');
+    const ctxAddr = document.getElementById('ctx-addr');
+    const ctxImg  = document.getElementById('ctx-img');
+    if (ctxName) ctxName.textContent = b.name;
+    if (ctxAddr) ctxAddr.textContent = b.address;
+    if (ctxImg) {
+      ctxImg.src = `/static/${b.image}`;
+      ctxImg.onerror = function() { this.src = '/static/images/CBRE_Downtown.jpg'; };
+    }
   }
   loadSummary(id);
   loadTrend(id, currentDays);
@@ -94,7 +97,11 @@ async function loadSummary(buildingId) {
     document.getElementById('stat-temp').innerHTML   = `${l.temperature}<span class="stat-mini-unit"> °C</span>`;
     document.getElementById('stat-waste').innerHTML  = `${l.waste}<span class="stat-mini-unit"> kg</span>`;
 
-    document.getElementById('last-updated-label').textContent = `Last data: ${l.date}`;
+    // Update building context bar EcoScore
+    const ctxGrade = document.getElementById('ctx-grade');
+    const ctxScoreNum = document.getElementById('ctx-score-num');
+    if (ctxGrade) { ctxGrade.textContent = data.grade; ctxGrade.style.background = data.grade_color; }
+    if (ctxScoreNum) ctxScoreNum.textContent = data.ecoscore;
 
     // Alerts list
     renderAlerts(data.alerts);

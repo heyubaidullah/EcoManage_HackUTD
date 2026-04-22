@@ -174,6 +174,10 @@ def add_building_redirect():
 def manage_page():
     return render_template('manage.html')
 
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
+
 @app.route('/static/<path:filename>')
 def serve_static(filename):
     return send_from_directory(app.static_folder, filename)

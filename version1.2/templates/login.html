@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — CBRE EcoManage</title>
+  <link rel="icon" href="/static/images/EM_favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+<body class="login-page">
+
+  <div class="login-header">
+    <img src="/static/images/CBRE_logo.png" alt="CBRE">
+    <span class="brand-divider" style="background:rgba(255,255,255,0.25)"></span>
+    <span class="app-name"><span class="eco" style="color:rgba(255,255,255,0.85)">Eco</span><span class="manage" style="color:#3CA358">Manage</span></span>
+  </div>
+
+  <div class="login-center">
+    <div class="login-card">
+
+      <div class="login-card-logo">
+        <img src="/static/images/CBRE_logo.png" alt="CBRE">
+        <div>
+          <div class="lc-title">CBRE EcoManage</div>
+          <div class="lc-sub">Sustainability Intelligence Platform</div>
+        </div>
+      </div>
+
+      <div class="login-heading">Welcome back</div>
+      <div class="login-sub">Sign in to your CBRE account to continue</div>
+
+      <form class="login-form" id="login-form">
+        <div class="form-row">
+          <label class="form-label" for="email">Email address</label>
+          <input type="email" class="form-control" id="email" placeholder="john.murphy@cbre.com" autocomplete="username">
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" class="form-control" id="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <a href="#" class="login-forgot">Forgot password?</a>
+        <button type="submit" class="btn-login">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          Sign In
+        </button>
+      </form>
+
+      <div class="login-note">
+        <i class="fa-solid fa-shield-halved" style="color:var(--cbre-green);margin-right:4px;"></i>
+        CBRE Single Sign-On &nbsp;·&nbsp; Secured by CBRE Identity Services
+      </div>
+
+    </div>
+  </div>
+
+  <div class="login-footer">
+    &copy; 2024 CBRE Group, Inc. All rights reserved.
+    &nbsp;·&nbsp;
+    Built by <a href="https://www.dynelabs.org" target="_blank" rel="noopener">Dyne Labs</a> for HackUTD 2024
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.btn-login');
+      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Signing in…';
+      btn.disabled = true;
+      setTimeout(() => { window.location.href = '/'; }, 1200);
+    });
+  </script>
+</body>
+</html>

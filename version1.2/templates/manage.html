@@ -5,56 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EcoManage — Manage Buildings</title>
   <link rel="icon" href="/static/images/EM_favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>
 
-  <!-- NAVBAR -->
+  <!-- TOP NAVBAR -->
   <nav class="em-navbar">
     <a href="/" class="brand">
       <img src="/static/images/CBRE_logo.png" alt="CBRE" class="logo">
-      <span class="app-name">Eco<span>Manage</span></span>
+      <span class="brand-divider"></span>
+      <span class="app-name"><span class="eco">Eco</span><span class="manage">Manage</span></span>
     </a>
-    <div class="center-area">
-      <div style="font-size:13px;font-weight:600;color:var(--text-secondary);">Building Management Portal</div>
-    </div>
-    <div class="nav-actions">
-      <a href="/" title="Dashboard">⊞</a>
-      <a href="/manage" title="Manage Buildings" class="active-nav-link">⊕</a>
+    <div class="navbar-actions">
+      <div class="dropdown-wrap">
+        <button class="notif-btn" id="notif-btn" title="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="notif-badge">3</span>
+        </button>
+        <div class="dropdown-panel" id="notif-panel">
+          <div class="dropdown-header">Notifications</div>
+          <div class="notif-item">
+            <span class="notif-dot" style="background:#f59e0b"></span>
+            <div>
+              <div class="notif-text">HVAC alert triggered at CBRE Plaza Tower</div>
+              <div class="notif-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-item">
+            <span class="notif-dot" style="background:#3CA358"></span>
+            <div>
+              <div class="notif-text">Monthly sustainability report is ready to review</div>
+              <div class="notif-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-item">
+            <span class="notif-dot" style="background:#3b82f6"></span>
+            <div>
+              <div class="notif-text">EcoScore™ for CBRE Tech Hub improved to grade B</div>
+              <div class="notif-time">1 day ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-wrap">
+        <button class="profile-btn" id="profile-btn">
+          <div class="profile-avatar">JM</div>
+          <span class="profile-name">John Murphy</span>
+          <i class="fa-solid fa-chevron-down profile-caret"></i>
+        </button>
+        <div class="dropdown-panel profile-panel" id="profile-panel">
+          <div class="profile-info">
+            <div class="pi-name">John Murphy</div>
+            <div class="pi-role">Senior Property Manager · CBRE</div>
+          </div>
+          <a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> My Profile</a>
+          <a class="dropdown-item" href="#"><i class="fa-regular fa-gear"></i> Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item danger" href="/login"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- SIDEBAR -->
-  <aside class="em-sidebar">
-    <div class="sidebar-building-card">
-      <img src="/static/images/CBRE_Downtown.jpg" alt="Building">
-      <div class="sidebar-building-name">Management Portal</div>
-      <div class="sidebar-building-addr">Add buildings &amp; log daily metrics</div>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="sidebar-section-label">Navigation</div>
-      <a href="/"><span class="nav-icon">📊</span> Dashboard</a>
-      <div class="sidebar-section-label">Management</div>
-      <a href="/manage" class="active"><span class="nav-icon">⚙️</span> Manage Buildings</a>
+  <!-- SUBNAV -->
+  <div class="em-subnav">
+    <nav class="subnav-links">
+      <a href="/" class="subnav-link">
+        <i class="fa-solid fa-gauge"></i>
+        <span class="link-text">Dashboard</span>
+      </a>
+      <a href="#" class="subnav-link active">
+        <i class="fa-solid fa-sliders"></i>
+        <span class="link-text">Manage Buildings</span>
+      </a>
     </nav>
-  </aside>
+  </div>
 
   <!-- MAIN -->
   <main class="em-main">
 
-    <div class="page-title-bar">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
       <div>
         <div class="page-title">Manage Buildings</div>
         <div class="page-subtitle">Register new properties and log daily sustainability metrics</div>
       </div>
-      <a href="/" class="btn-primary" style="text-decoration:none;">← Back to Dashboard</a>
+      <a href="/" class="btn-outline" style="text-decoration:none;">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
     </div>
 
     <div class="manage-grid">
 
       <!-- ADD BUILDING FORM -->
       <div class="form-card">
-        <h3>➕ Register New Building</h3>
+        <h3><i class="fa-solid fa-plus-circle" style="color:var(--cbre-green)"></i> Register New Building</h3>
         <form id="add-building-form">
           <div class="form-row">
             <label class="form-label" for="buildingName">Building Name</label>
@@ -65,14 +110,16 @@
             <input type="text" class="form-control" id="buildingAddress" placeholder="e.g. 1234 Commerce St, Dallas, TX 75201" required>
           </div>
           <div style="margin-top:20px;">
-            <button type="submit" class="btn-primary">Register Building</button>
+            <button type="submit" class="btn-primary">
+              <i class="fa-solid fa-building-circle-arrow-right"></i> Register Building
+            </button>
           </div>
         </form>
       </div>
 
       <!-- LOG DAILY DATA FORM -->
       <div class="form-card">
-        <h3>📋 Log Daily Metrics</h3>
+        <h3><i class="fa-solid fa-clipboard-list" style="color:var(--cbre-green)"></i> Log Daily Metrics</h3>
         <form id="daily-data-form">
           <div class="form-grid-2">
             <div class="form-row">
@@ -107,47 +154,61 @@
             </div>
           </div>
           <div style="margin-top:16px;">
-            <button type="submit" class="btn-secondary">Save Daily Record</button>
+            <button type="submit" class="btn-secondary">
+              <i class="fa-solid fa-floppy-disk"></i> Save Daily Record
+            </button>
           </div>
         </form>
       </div>
     </div>
 
     <!-- BUILDINGS TABLE -->
-    <div class="form-card">
-      <h3>🏢 Registered Buildings</h3>
+    <div class="form-card mb-20">
+      <h3><i class="fa-solid fa-building" style="color:var(--cbre-green)"></i> Registered Buildings</h3>
       <div id="buildings-table-wrap">
         <div class="loading-pulse" style="height:120px;"></div>
       </div>
     </div>
 
     <!-- BENCHMARKS INFO -->
-    <div class="form-card" style="margin-top:20px;">
-      <h3>📌 Sustainability Benchmarks</h3>
-      <div class="form-grid-2" style="margin-top:12px;">
-        <div>
-          <div class="stat-mini" style="margin-bottom:10px;">
-            <div class="stat-mini-label">Energy — Excellent / Poor</div>
-            <div class="stat-mini-value">≤80 <span class="stat-mini-unit">kWh / </span>≥220<span class="stat-mini-unit"> kWh</span></div>
+    <div class="form-card mb-20">
+      <h3><i class="fa-solid fa-ruler-combined" style="color:var(--cbre-green)"></i> Sustainability Benchmarks</h3>
+      <div class="form-grid-2" style="margin-top:12px;gap:12px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="stat-mini">
+            <div class="stat-mini-icon" style="background:#e8f5e9;color:#003F2D"><i class="fa-solid fa-bolt"></i></div>
+            <div class="stat-mini-body">
+              <div class="stat-mini-label">Energy — Excellent / Poor</div>
+              <div class="stat-mini-value" style="font-size:14px;">≤80 <span class="stat-mini-unit">kWh</span> / ≥220<span class="stat-mini-unit"> kWh</span></div>
+            </div>
           </div>
           <div class="stat-mini">
-            <div class="stat-mini-label">HVAC — Excellent / Poor</div>
-            <div class="stat-mini-value">≤40<span class="stat-mini-unit">% / </span>≥90<span class="stat-mini-unit">%</span></div>
+            <div class="stat-mini-icon" style="background:#eff6ff;color:#3b82f6"><i class="fa-solid fa-wind"></i></div>
+            <div class="stat-mini-body">
+              <div class="stat-mini-label">HVAC — Excellent / Poor</div>
+              <div class="stat-mini-value" style="font-size:14px;">≤40<span class="stat-mini-unit">%</span> / ≥90<span class="stat-mini-unit">%</span></div>
+            </div>
           </div>
         </div>
-        <div>
-          <div class="stat-mini" style="margin-bottom:10px;">
-            <div class="stat-mini-label">Temperature — Ideal Range</div>
-            <div class="stat-mini-value">19–25<span class="stat-mini-unit"> °C</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="stat-mini">
+            <div class="stat-mini-icon" style="background:#fffbeb;color:#f59e0b"><i class="fa-solid fa-temperature-half"></i></div>
+            <div class="stat-mini-body">
+              <div class="stat-mini-label">Temperature — Ideal Range</div>
+              <div class="stat-mini-value" style="font-size:14px;">19–25<span class="stat-mini-unit"> °C</span></div>
+            </div>
           </div>
           <div class="stat-mini">
-            <div class="stat-mini-label">Waste — Excellent / Poor</div>
-            <div class="stat-mini-value">≤4<span class="stat-mini-unit">kg / </span>≥16<span class="stat-mini-unit"> kg</span></div>
+            <div class="stat-mini-icon" style="background:#fef2f2;color:#ef4444"><i class="fa-solid fa-trash-can"></i></div>
+            <div class="stat-mini-body">
+              <div class="stat-mini-label">Waste — Excellent / Poor</div>
+              <div class="stat-mini-value" style="font-size:14px;">≤4<span class="stat-mini-unit">kg</span> / ≥16<span class="stat-mini-unit"> kg</span></div>
+            </div>
           </div>
         </div>
       </div>
-      <div style="margin-top:12px;font-size:11px;color:var(--text-muted);line-height:1.6;">
-        <strong>EcoScore™</strong> is a composite sustainability rating (0–100) calculated as a weighted average:
+      <div style="margin-top:14px;padding:12px 14px;background:var(--cbre-pale);border-radius:var(--radius-sm);font-size:11.5px;color:var(--text-secondary);line-height:1.6;border:1px solid var(--border-light);">
+        <strong style="color:var(--cbre-dark)">EcoScore™</strong> is a composite sustainability rating (0–100) calculated as a weighted average:
         Energy 30% · HVAC 30% · Temperature 20% · Waste 20%.
         Carbon footprint uses EPA conversion factors: Energy × 0.233 kg CO₂e/kWh, Waste × 0.5 kg CO₂e/kg.
       </div>
@@ -162,16 +223,35 @@
       <div class="footer-tagline">Intelligent Sustainability for the Built World</div>
     </div>
     <div class="footer-center">
-      <div class="footer-domain">ecomanage.dynelabs.org</div>
+      <div class="footer-hackutd"><i class="fa-solid fa-trophy" style="margin-right:5px;"></i>Made for HackUTD 2024</div>
     </div>
     <div class="footer-right">
       <div class="footer-credit">Built by Ubaid &amp; Christina at <a href="https://www.dynelabs.org" target="_blank" rel="noopener">Dyne Labs</a> &copy; 2024</div>
     </div>
   </footer>
 
-  <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
+  <script>
+    function setupDropdown(btnId, panelId) {
+      const btn = document.getElementById(btnId);
+      const panel = document.getElementById(panelId);
+      if (!btn || !panel) return;
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = panel.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen);
+        document.querySelectorAll('.dropdown-panel').forEach(p => {
+          if (p !== panel) p.classList.remove('open');
+        });
+      });
+    }
+    setupDropdown('notif-btn', 'notif-panel');
+    setupDropdown('profile-btn', 'profile-panel');
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown-panel').forEach(p => p.classList.remove('open'));
+    });
+  </script>
   <script src="/static/manage.js"></script>
 </body>
 </html>
