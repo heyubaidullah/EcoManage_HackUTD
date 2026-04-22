@@ -1,32 +1,28 @@
+import os
 from flask import Flask, jsonify, request, render_template, send_from_directory
 from flask_cors import CORS
 from models import db, Building, DailyData
 
-# Initialize Flask app
-app = Flask(__name__, static_folder="static")
+app = Flask(__name__, static_folder="static", template_folder="templates")
 CORS(app)
 
-# Database Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ecouser:admin@localhost/ecomanage'
+DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://ecouser:admin@localhost/ecomanage')
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-# Serve the add-building.html file
 @app.route('/add-building')
 def add_building_page():
-    return render_template('C:/Users/del028/Downloads/hackutd/duthie_files/templates/add-building.html')
+    return render_template('add-building.html')
 
-# Serve the index.html (Dashboard)
 @app.route('/')
 def dashboard():
-    return render_template('C:/Users/del028/Downloads/hackutd/duthie_files/templates/index.html')
+    return render_template('index.html')
 
-# Serve static files
 @app.route('/static/<path:filename>')
 def serve_static(filename):
     return send_from_directory(app.static_folder, filename)
 
-# Routes for building management
 @app.route('/buildings', methods=['GET'])
 def get_buildings():
     buildings = Building.query.all()
@@ -80,9 +76,7 @@ def get_daily_data(building_id):
         for d in data
     ])
 
-# Run the application
 if __name__ == '__main__':
-    # Ensure database tables are created
     with app.app_context():
         db.create_all()
-    app.run(debug=True, port=5001)
+    app.run(debug=True, host='0.0.0.0', port=5000)
