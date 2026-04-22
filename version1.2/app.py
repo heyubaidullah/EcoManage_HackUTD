@@ -328,6 +328,52 @@ def get_portfolio():
             })
     return jsonify(portfolio)
 
+@app.route('/api/forecast/<int:building_id>')
+def get_forecast(building_id):
+    cutoff = date.today() - timedelta(days=30)
+    records = DailyData.query.filter(
+        DailyData.building_id == building_id,
+        DailyData.date >= cutoff
+    ).order_by(DailyData.date.asc()).all()
+
+    if len(records) < 2:
+        return jsonify({'error': 'Not enough data to forecast'}), 400
+
+    def linear_regression(values):
+        n = len(values)
+        x_vals = list(range(n))
+        sum_x = sum(x_vals)
+        sum_y = sum(values)
+        sum_xy = sum(x * y for x, y in zip(x_vals, values))
+        sum_xx = sum(x * x for x in x_vals)
+        denom = n * sum_xx - sum_x ** 2
+        if denom == 0:
+            return 0, sum_y / n
+        slope = (n * sum_xy - sum_x * sum_y) / denom
+        intercept = (sum_y - slope * sum_x) / n
+        return slope, intercept
+
+    energy_vals = [r.energy for r in records]
+    waste_vals = [r.waste for r in records]
+
+    e_slope, e_intercept = linear_regression(energy_vals)
+    w_slope, w_intercept = linear_regression(waste_vals)
+
+    n = len(records)
+    last_date = records[-1].date
+    forecasts = []
+    for k in range(1, 8):
+        future_date = last_date + timedelta(days=k)
+        pred_energy = round(max(50, e_slope * (n - 1 + k) + e_intercept), 1)
+        pred_waste = round(max(1, w_slope * (n - 1 + k) + w_intercept), 1)
+        forecasts.append({
+            'date': future_date.strftime('%Y-%m-%d'),
+            'energy': pred_energy,
+            'waste': pred_waste,
+        })
+
+    return jsonify({'forecasts': forecasts})
+
 @app.route('/api/alerts/<int:building_id>')
 def get_alerts(building_id):
     last = DailyData.query.filter_by(building_id=building_id).order_by(DailyData.date.desc()).first()

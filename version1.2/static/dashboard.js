@@ -148,19 +148,37 @@ function renderRecommendations(recs) {
 /* ── TREND CHART ────────────────────────────────────── */
 async function loadTrend(buildingId, days) {
   try {
-    const res = await fetch(`${API}/data/${buildingId}?days=${days}`);
-    const data = await res.json();
+    const [histRes, forecastRes] = await Promise.all([
+      fetch(`${API}/data/${buildingId}?days=${days}`),
+      fetch(`${API}/api/forecast/${buildingId}`)
+    ]);
+    if (!histRes.ok) {
+      console.error('Failed to fetch historical data');
+      renderForecastSection([]);
+      return;
+    }
+    const data = await histRes.json();
+    const forecastData = forecastRes.ok ? (await forecastRes.json()).forecasts || [] : [];
 
-    const labels = data.map(d => {
-      const dt = new Date(d.date);
+    const histLabels = data.map(d => {
+      const dt = new Date(d.date + 'T00:00:00');
+      return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+    const forecastLabels = forecastData.map(d => {
+      const dt = new Date(d.date + 'T00:00:00');
       return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     });
 
+    const allLabels = [...histLabels, ...forecastLabels];
+    const histLen = data.length;
+    const forecastLen = forecastData.length;
+
     const datasets = [];
+
     for (const [key, cfg] of Object.entries(METRIC_CONFIG)) {
       datasets.push({
         label: cfg.label,
-        data: data.map(d => d[key]),
+        data: [...data.map(d => d[key]), ...Array(forecastLen).fill(null)],
         borderColor: cfg.color,
         backgroundColor: cfg.color + '18',
         borderWidth: 2,
@@ -170,18 +188,67 @@ async function loadTrend(buildingId, days) {
         fill: false,
         hidden: !activeMetrics.has(key),
         yAxisID: cfg.yAxis,
+        spanGaps: false,
+      });
+    }
+
+    if (forecastLen > 0) {
+      const padLen = Math.max(0, histLen - 1);
+      const energyAnchor = histLen > 0 ? [data[histLen - 1].energy] : [];
+      const wasteAnchor  = histLen > 0 ? [data[histLen - 1].waste]  : [];
+
+      datasets.push({
+        label: 'Energy Forecast (kWh)',
+        data: [
+          ...Array(padLen).fill(null),
+          ...energyAnchor,
+          ...forecastData.map(d => d.energy)
+        ],
+        borderColor: '#3CA358',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        pointStyle: 'circle',
+        tension: 0.3,
+        fill: false,
+        hidden: !activeMetrics.has('energy'),
+        yAxisID: 'y1',
+        spanGaps: false,
+      });
+
+      datasets.push({
+        label: 'Waste Forecast (kg)',
+        data: [
+          ...Array(padLen).fill(null),
+          ...wasteAnchor,
+          ...forecastData.map(d => d.waste)
+        ],
+        borderColor: '#ef4444',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        pointStyle: 'circle',
+        tension: 0.3,
+        fill: false,
+        hidden: !activeMetrics.has('waste'),
+        yAxisID: 'y4',
+        spanGaps: false,
       });
     }
 
     if (trendChart) {
-      trendChart.data.labels = labels;
+      trendChart.data.labels = allLabels;
       trendChart.data.datasets = datasets;
       trendChart.update();
     } else {
       const ctx = document.getElementById('trend-chart').getContext('2d');
       trendChart = new Chart(ctx, {
         type: 'line',
-        data: { labels, datasets },
+        data: { labels: allLabels, datasets },
         options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -197,13 +264,17 @@ async function loadTrend(buildingId, days) {
               padding: 10,
               callbacks: {
                 title: (items) => items[0].label,
+                label: (item) => {
+                  const isForecast = item.dataset.label.includes('Forecast');
+                  return `${item.dataset.label}: ${item.formattedValue}${isForecast ? ' (estimate)' : ''}`;
+                }
               }
             }
           },
           scales: {
             x: {
               grid: { color: '#f0f4f2' },
-              ticks: { color: '#8fa89f', font: { size: 10 }, maxTicksLimit: 10 }
+              ticks: { color: '#8fa89f', font: { size: 10 }, maxTicksLimit: 12 }
             },
             y1: {
               type: 'linear', position: 'left',
@@ -227,9 +298,39 @@ async function loadTrend(buildingId, days) {
         }
       });
     }
+
+    renderForecastSection(forecastData);
+
   } catch (e) {
     console.error('Failed to load trend data', e);
   }
+}
+
+/* ── FORECAST SECTION ───────────────────────────────── */
+function renderForecastSection(forecasts) {
+  const el = document.getElementById('forecast-rows');
+  if (!el) return;
+  if (!forecasts || forecasts.length === 0) {
+    el.innerHTML = '<div style="color:var(--text-muted);font-size:12px;">No forecast available.</div>';
+    return;
+  }
+  el.innerHTML = forecasts.map(f => {
+    const dt = new Date(f.date + 'T00:00:00');
+    const label = dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    return `
+      <div class="forecast-row">
+        <div class="forecast-date">${label}</div>
+        <div class="forecast-val energy-val">
+          <span class="forecast-dot" style="background:#3CA358"></span>
+          ${f.energy} <span class="forecast-unit">kWh</span>
+        </div>
+        <div class="forecast-val waste-val">
+          <span class="forecast-dot" style="background:#ef4444"></span>
+          ${f.waste} <span class="forecast-unit">kg</span>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 /* ── PORTFOLIO ──────────────────────────────────────── */
@@ -288,7 +389,13 @@ document.querySelectorAll('.metric-toggle').forEach(btn => {
     if (trendChart) {
       trendChart.data.datasets.forEach(ds => {
         const key = Object.keys(METRIC_CONFIG).find(k => METRIC_CONFIG[k].label === ds.label);
-        ds.hidden = !activeMetrics.has(key);
+        if (key) {
+          ds.hidden = !activeMetrics.has(key);
+        } else if (ds.label === 'Energy Forecast (kWh)') {
+          ds.hidden = !activeMetrics.has('energy');
+        } else if (ds.label === 'Waste Forecast (kg)') {
+          ds.hidden = !activeMetrics.has('waste');
+        }
       });
       trendChart.update();
     }
