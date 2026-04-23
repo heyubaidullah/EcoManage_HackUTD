@@ -27,42 +27,33 @@
           <div class="dropdown-header">Notifications</div>
           <div class="notif-item">
             <span class="notif-dot" style="background:#f59e0b"></span>
-            <div>
-              <div class="notif-text">HVAC alert triggered at CBRE Plaza Tower</div>
-              <div class="notif-time">2 hours ago</div>
-            </div>
+            <div><div class="notif-text">HVAC alert triggered at CBRE Plaza Tower</div><div class="notif-time">2 hours ago</div></div>
           </div>
           <div class="notif-item">
             <span class="notif-dot" style="background:#3CA358"></span>
-            <div>
-              <div class="notif-text">Monthly sustainability report is ready to review</div>
-              <div class="notif-time">5 hours ago</div>
-            </div>
+            <div><div class="notif-text">Monthly sustainability report is ready</div><div class="notif-time">5 hours ago</div></div>
           </div>
           <div class="notif-item">
             <span class="notif-dot" style="background:#3b82f6"></span>
-            <div>
-              <div class="notif-text">EcoScore™ for CBRE Tech Hub improved to grade B</div>
-              <div class="notif-time">1 day ago</div>
-            </div>
+            <div><div class="notif-text">EcoScore™ for CBRE Tech Hub improved to grade B</div><div class="notif-time">1 day ago</div></div>
           </div>
         </div>
       </div>
       <div class="dropdown-wrap">
         <button class="profile-btn" id="profile-btn">
-          <div class="profile-avatar">JM</div>
-          <span class="profile-name">John Murphy</span>
+          <div class="profile-avatar">UJ</div>
+          <span class="profile-name">Ubayd Joseph</span>
           <i class="fa-solid fa-chevron-down profile-caret"></i>
         </button>
         <div class="dropdown-panel profile-panel" id="profile-panel">
           <div class="profile-info">
-            <div class="pi-name">John Murphy</div>
+            <div class="pi-name">Ubayd Joseph</div>
             <div class="pi-role">Senior Property Manager · CBRE</div>
           </div>
           <a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> My Profile</a>
           <a class="dropdown-item" href="#"><i class="fa-regular fa-gear"></i> Settings</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item danger" href="/login"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+          <a class="dropdown-item danger" href="/"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
         </div>
       </div>
     </div>
@@ -71,14 +62,8 @@
   <!-- SUBNAV -->
   <div class="em-subnav">
     <nav class="subnav-links">
-      <a href="/" class="subnav-link">
-        <i class="fa-solid fa-gauge"></i>
-        <span class="link-text">Dashboard</span>
-      </a>
-      <a href="#" class="subnav-link active">
-        <i class="fa-solid fa-sliders"></i>
-        <span class="link-text">Manage Buildings</span>
-      </a>
+      <a href="/dashboard" class="subnav-link"><i class="fa-solid fa-gauge"></i><span class="link-text">Dashboard</span></a>
+      <a href="#" class="subnav-link active"><i class="fa-solid fa-sliders"></i><span class="link-text">Manage Buildings</span></a>
     </nav>
   </div>
 
@@ -90,14 +75,13 @@
         <div class="page-title">Manage Buildings</div>
         <div class="page-subtitle">Register new properties and log daily sustainability metrics</div>
       </div>
-      <a href="/" class="btn-outline" style="text-decoration:none;">
+      <a href="/dashboard" class="btn-outline" style="text-decoration:none;">
         <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
       </a>
     </div>
 
     <div class="manage-grid">
 
-      <!-- ADD BUILDING FORM -->
       <div class="form-card">
         <h3><i class="fa-solid fa-plus-circle" style="color:var(--cbre-green)"></i> Register New Building</h3>
         <form id="add-building-form">
@@ -117,7 +101,6 @@
         </form>
       </div>
 
-      <!-- LOG DAILY DATA FORM -->
       <div class="form-card">
         <h3><i class="fa-solid fa-clipboard-list" style="color:var(--cbre-green)"></i> Log Daily Metrics</h3>
         <form id="daily-data-form">
@@ -170,64 +153,44 @@
       </div>
     </div>
 
-    <!-- BENCHMARKS INFO -->
+    <!-- BENCHMARKS -->
     <div class="form-card mb-20">
       <h3><i class="fa-solid fa-ruler-combined" style="color:var(--cbre-green)"></i> Sustainability Benchmarks</h3>
       <div class="form-grid-2" style="margin-top:12px;gap:12px;">
         <div style="display:flex;flex-direction:column;gap:10px;">
           <div class="stat-mini">
-            <div class="stat-mini-icon" style="background:#e8f5e9;color:#003F2D"><i class="fa-solid fa-bolt"></i></div>
-            <div class="stat-mini-body">
-              <div class="stat-mini-label">Energy — Excellent / Poor</div>
-              <div class="stat-mini-value" style="font-size:14px;">≤80 <span class="stat-mini-unit">kWh</span> / ≥220<span class="stat-mini-unit"> kWh</span></div>
-            </div>
+            <div class="stat-mini-icon" style="background:linear-gradient(135deg,#e8f5e9,#c8ead0);color:#003F2D"><i class="fa-solid fa-bolt"></i></div>
+            <div><div class="stat-mini-label">Energy — Excellent / Poor</div><div class="stat-mini-value" style="font-size:14px;">≤80 <span class="stat-mini-unit">kWh</span> / ≥220<span class="stat-mini-unit"> kWh</span></div></div>
           </div>
           <div class="stat-mini">
-            <div class="stat-mini-icon" style="background:#eff6ff;color:#3b82f6"><i class="fa-solid fa-wind"></i></div>
-            <div class="stat-mini-body">
-              <div class="stat-mini-label">HVAC — Excellent / Poor</div>
-              <div class="stat-mini-value" style="font-size:14px;">≤40<span class="stat-mini-unit">%</span> / ≥90<span class="stat-mini-unit">%</span></div>
-            </div>
+            <div class="stat-mini-icon" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);color:#3b82f6"><i class="fa-solid fa-wind"></i></div>
+            <div><div class="stat-mini-label">HVAC — Excellent / Poor</div><div class="stat-mini-value" style="font-size:14px;">≤40<span class="stat-mini-unit">%</span> / ≥90<span class="stat-mini-unit">%</span></div></div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <div class="stat-mini">
-            <div class="stat-mini-icon" style="background:#fffbeb;color:#f59e0b"><i class="fa-solid fa-temperature-half"></i></div>
-            <div class="stat-mini-body">
-              <div class="stat-mini-label">Temperature — Ideal Range</div>
-              <div class="stat-mini-value" style="font-size:14px;">19–25<span class="stat-mini-unit"> °C</span></div>
-            </div>
+            <div class="stat-mini-icon" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);color:#f59e0b"><i class="fa-solid fa-temperature-half"></i></div>
+            <div><div class="stat-mini-label">Temperature — Ideal Range</div><div class="stat-mini-value" style="font-size:14px;">19–25<span class="stat-mini-unit"> °C</span></div></div>
           </div>
           <div class="stat-mini">
-            <div class="stat-mini-icon" style="background:#fef2f2;color:#ef4444"><i class="fa-solid fa-trash-can"></i></div>
-            <div class="stat-mini-body">
-              <div class="stat-mini-label">Waste — Excellent / Poor</div>
-              <div class="stat-mini-value" style="font-size:14px;">≤4<span class="stat-mini-unit">kg</span> / ≥16<span class="stat-mini-unit"> kg</span></div>
-            </div>
+            <div class="stat-mini-icon" style="background:linear-gradient(135deg,#fef2f2,#fee2e2);color:#ef4444"><i class="fa-solid fa-trash-can"></i></div>
+            <div><div class="stat-mini-label">Waste — Excellent / Poor</div><div class="stat-mini-value" style="font-size:14px;">≤4<span class="stat-mini-unit">kg</span> / ≥16<span class="stat-mini-unit"> kg</span></div></div>
           </div>
         </div>
       </div>
       <div style="margin-top:14px;padding:12px 14px;background:var(--cbre-pale);border-radius:var(--radius-sm);font-size:11.5px;color:var(--text-secondary);line-height:1.6;border:1px solid var(--border-light);">
-        <strong style="color:var(--cbre-dark)">EcoScore™</strong> is a composite sustainability rating (0–100) calculated as a weighted average:
-        Energy 30% · HVAC 30% · Temperature 20% · Waste 20%.
-        Carbon footprint uses EPA conversion factors: Energy × 0.233 kg CO₂e/kWh, Waste × 0.5 kg CO₂e/kg.
+        <strong style="color:var(--cbre-dark)">EcoScore™</strong> — composite rating (0–100): Energy 30% · HVAC 30% · Temperature 20% · Waste 20%.
+        Carbon footprint uses EPA factors: Energy × 0.233 kg CO₂e/kWh, Waste × 0.5 kg CO₂e/kg.
+        Business cost estimated at $0.12/kWh (US commercial average).
       </div>
     </div>
 
   </main>
 
-  <!-- FOOTER -->
   <footer class="em-footer">
-    <div class="footer-brand">
-      <div class="footer-product">CBRE EcoManage</div>
-      <div class="footer-tagline">Intelligent Sustainability for the Built World</div>
-    </div>
-    <div class="footer-center">
-      <div class="footer-hackutd"><i class="fa-solid fa-trophy" style="margin-right:5px;"></i>Made for HackUTD 2024</div>
-    </div>
-    <div class="footer-right">
-      <div class="footer-credit">Built by Ubaid &amp; Christina at <a href="https://www.dynelabs.org" target="_blank" rel="noopener">Dyne Labs</a> &copy; 2024</div>
-    </div>
+    <div class="footer-brand"><div class="footer-product">CBRE EcoManage</div><div class="footer-tagline">Intelligent Sustainability for the Built World</div></div>
+    <div style="text-align:center"><div class="footer-hackutd"><i class="fa-solid fa-trophy" style="margin-right:5px;"></i>Made for HackUTD 2024</div></div>
+    <div class="footer-right"><div class="footer-credit">Built by Ubaid &amp; Christina at <a href="https://www.dynelabs.org" target="_blank" rel="noopener">Dyne Labs</a> &copy; 2024</div></div>
   </footer>
 
   <div class="toast-container" id="toast-container"></div>
@@ -237,20 +200,15 @@
       const btn = document.getElementById(btnId);
       const panel = document.getElementById(panelId);
       if (!btn || !panel) return;
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', e => {
         e.stopPropagation();
-        const isOpen = panel.classList.toggle('open');
-        btn.setAttribute('aria-expanded', isOpen);
-        document.querySelectorAll('.dropdown-panel').forEach(p => {
-          if (p !== panel) p.classList.remove('open');
-        });
+        panel.classList.toggle('open');
+        document.querySelectorAll('.dropdown-panel').forEach(p => { if (p !== panel) p.classList.remove('open'); });
       });
     }
     setupDropdown('notif-btn', 'notif-panel');
     setupDropdown('profile-btn', 'profile-panel');
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.dropdown-panel').forEach(p => p.classList.remove('open'));
-    });
+    document.addEventListener('click', () => document.querySelectorAll('.dropdown-panel').forEach(p => p.classList.remove('open')));
   </script>
   <script src="/static/manage.js"></script>
 </body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoManage — CBRE Sustainability Dashboard</title>
+  <title>EcoManage — Sustainability Dashboard</title>
   <link rel="icon" href="/static/images/EM_favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/static/main.css">
@@ -21,7 +21,7 @@
     <div class="navbar-actions">
       <!-- Notifications -->
       <div class="dropdown-wrap">
-        <button class="notif-btn" id="notif-btn" title="Notifications" aria-haspopup="true" aria-expanded="false">
+        <button class="notif-btn" id="notif-btn" title="Notifications" aria-haspopup="true">
           <i class="fa-regular fa-bell"></i>
           <span class="notif-badge">3</span>
         </button>
@@ -53,20 +53,21 @@
 
       <!-- Profile -->
       <div class="dropdown-wrap">
-        <button class="profile-btn" id="profile-btn" aria-haspopup="true" aria-expanded="false">
-          <div class="profile-avatar">JM</div>
-          <span class="profile-name">John Murphy</span>
+        <button class="profile-btn" id="profile-btn" aria-haspopup="true">
+          <div class="profile-avatar">UJ</div>
+          <span class="profile-name">Ubayd Joseph</span>
           <i class="fa-solid fa-chevron-down profile-caret"></i>
         </button>
         <div class="dropdown-panel profile-panel" id="profile-panel">
           <div class="profile-info">
-            <div class="pi-name">John Murphy</div>
+            <div class="pi-name">Ubayd Joseph</div>
             <div class="pi-role">Senior Property Manager · CBRE</div>
           </div>
           <a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> My Profile</a>
           <a class="dropdown-item" href="#"><i class="fa-regular fa-gear"></i> Settings</a>
+          <a class="dropdown-item" href="#"><i class="fa-solid fa-file-export"></i> Reports</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item danger" href="/login"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+          <a class="dropdown-item danger" href="/"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
         </div>
       </div>
     </div>
@@ -108,7 +109,7 @@
     </nav>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <main class="em-main" id="top">
 
     <!-- Building Context Bar -->
@@ -118,7 +119,7 @@
         <div class="building-ctx-name" id="ctx-name">Loading…</div>
         <div class="building-ctx-addr" id="ctx-addr">—</div>
       </div>
-      <div class="building-ctx-score" id="ctx-score-wrap">
+      <div class="building-ctx-score">
         <div class="ctx-badge">
           <span style="font-size:11px;color:var(--text-muted)">EcoScore™</span>
           <span class="grade-pill" id="ctx-grade" style="background:#6b7280">—</span>
@@ -128,70 +129,148 @@
     </div>
 
     <!-- Page Header -->
-    <div style="margin-bottom:18px;">
-      <div class="page-title">Sustainability Dashboard</div>
-      <div class="page-subtitle">Real-time building performance monitoring &amp; analytics</div>
+    <div class="page-header">
+      <div>
+        <div class="page-title">Sustainability Dashboard</div>
+        <div class="page-subtitle">Real-time building performance monitoring &amp; analytics</div>
+      </div>
+      <button class="btn-export" id="export-btn">
+        <i class="fa-solid fa-file-arrow-down"></i> Export Report
+      </button>
     </div>
 
     <!-- KPI CARDS -->
     <div class="kpi-row" id="kpi-row">
-      <div class="kpi-card">
-        <div class="kpi-icon green"><i class="fa-solid fa-leaf"></i></div>
-        <div class="kpi-content">
-          <div class="kpi-label">EcoScore™</div>
-          <div class="kpi-value" id="kpi-score">
-            <span id="score-num">—</span>
-            <span class="grade-badge" id="grade-badge" style="background:#6b7280">—</span>
-          </div>
-          <div class="kpi-sub">7-day weighted average</div>
+
+      <!-- EcoScore Gauge Card -->
+      <div class="kpi-card eco-gauge-card">
+        <div class="kpi-label" style="font-size:10.5px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;text-align:center;">EcoScore™</div>
+        <div class="gauge-wrap">
+          <svg viewBox="0 0 120 116" class="gauge-svg">
+            <!-- Track: 270° arc, gap at bottom, rotate -135° so arc starts at bottom-left -->
+            <circle id="gauge-track" cx="60" cy="64" r="42"
+              fill="none" stroke="var(--border)" stroke-width="11"
+              stroke-dasharray="197.9 65.9"
+              stroke-linecap="round"
+              transform="rotate(-135 60 64)"/>
+            <!-- Score arc: animates in via JS -->
+            <circle id="gauge-arc" cx="60" cy="64" r="42"
+              fill="none" stroke="var(--cbre-green)" stroke-width="11"
+              stroke-dasharray="0 263.9"
+              stroke-linecap="round"
+              transform="rotate(-135 60 64)"
+              style="transition:stroke-dasharray 0.9s cubic-bezier(0.4,0,0.2,1), stroke 0.5s ease"/>
+            <!-- Score number -->
+            <text id="gauge-num" x="60" y="61"
+              text-anchor="middle" dominant-baseline="middle"
+              style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:700;fill:var(--text-primary)">—</text>
+            <!-- Grade text under number -->
+            <text id="gauge-grade-text" x="60" y="80"
+              text-anchor="middle"
+              style="font-family:'Inter',sans-serif;font-size:12px;font-weight:700;fill:#888">—</text>
+          </svg>
         </div>
+        <div class="gauge-sub">7-day weighted average</div>
       </div>
+
+      <!-- Carbon Footprint -->
       <div class="kpi-card carbon-card">
         <div class="kpi-icon blue"><i class="fa-solid fa-earth-americas"></i></div>
         <div class="kpi-content">
           <div class="kpi-label">Carbon Footprint</div>
           <div class="kpi-value" id="kpi-carbon">—</div>
           <div class="kpi-sub">kg CO₂e today (energy + waste)</div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);">
+            <div id="carbon-trees" style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px;">
+              <i class="fa-solid fa-tree" style="color:#22c55e;font-size:12px;"></i>
+              <span>Calculating offset…</span>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Active Alerts -->
       <div class="kpi-card alert-card">
         <div class="kpi-icon amber"><i class="fa-solid fa-bell"></i></div>
         <div class="kpi-content">
           <div class="kpi-label">Active Alerts</div>
           <div class="kpi-value" id="kpi-alerts">—</div>
           <div class="kpi-sub" id="kpi-alerts-sub">Threshold breaches today</div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);">
+            <div id="esg-status-badge" style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px;">
+              <i class="fa-solid fa-circle-dot" style="font-size:10px;"></i>
+              <span>ESG Status: —</span>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
 
     <!-- STAT MINI ROW -->
     <div class="stat-row mb-16" id="stat-row">
       <div class="stat-mini">
-        <div class="stat-mini-icon" style="background:#e8f5e9;color:#003F2D"><i class="fa-solid fa-bolt"></i></div>
-        <div class="stat-mini-body">
+        <div class="stat-mini-icon" style="background:linear-gradient(135deg,#e8f5e9,#c8ead0);color:#003F2D"><i class="fa-solid fa-bolt"></i></div>
+        <div>
           <div class="stat-mini-label">Energy</div>
           <div class="stat-mini-value" id="stat-energy">—<span class="stat-mini-unit"> kWh</span></div>
         </div>
       </div>
       <div class="stat-mini">
-        <div class="stat-mini-icon" style="background:#eff6ff;color:#3b82f6"><i class="fa-solid fa-wind"></i></div>
-        <div class="stat-mini-body">
+        <div class="stat-mini-icon" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);color:#3b82f6"><i class="fa-solid fa-wind"></i></div>
+        <div>
           <div class="stat-mini-label">HVAC Usage</div>
           <div class="stat-mini-value" id="stat-hvac">—<span class="stat-mini-unit"> %</span></div>
         </div>
       </div>
       <div class="stat-mini">
-        <div class="stat-mini-icon" style="background:#fffbeb;color:#f59e0b"><i class="fa-solid fa-temperature-half"></i></div>
-        <div class="stat-mini-body">
+        <div class="stat-mini-icon" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);color:#f59e0b"><i class="fa-solid fa-temperature-half"></i></div>
+        <div>
           <div class="stat-mini-label">Temperature</div>
           <div class="stat-mini-value" id="stat-temp">—<span class="stat-mini-unit"> °C</span></div>
         </div>
       </div>
       <div class="stat-mini">
-        <div class="stat-mini-icon" style="background:#fef2f2;color:#ef4444"><i class="fa-solid fa-trash-can"></i></div>
-        <div class="stat-mini-body">
+        <div class="stat-mini-icon" style="background:linear-gradient(135deg,#fef2f2,#fee2e2);color:#ef4444"><i class="fa-solid fa-trash-can"></i></div>
+        <div>
           <div class="stat-mini-label">Waste</div>
           <div class="stat-mini-value" id="stat-waste">—<span class="stat-mini-unit"> kg</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUSINESS IMPACT ROW -->
+    <div class="biz-row mb-16" id="biz-row">
+      <div class="biz-card">
+        <div class="biz-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+        <div class="biz-body">
+          <div class="biz-label">Est. Daily Energy Cost</div>
+          <div class="biz-value" id="biz-cost">—<span class="unit"> USD</span></div>
+          <div class="biz-sub">at $0.12 / kWh commercial rate</div>
+        </div>
+      </div>
+      <div class="biz-card">
+        <div class="biz-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+        <div class="biz-body">
+          <div class="biz-label">Monthly Projection</div>
+          <div class="biz-value" id="biz-monthly">—<span class="unit"> USD</span></div>
+          <div class="biz-sub" id="biz-monthly-sub">vs $720 baseline (200 kWh/day)</div>
+        </div>
+      </div>
+      <div class="biz-card">
+        <div class="biz-icon"><i class="fa-solid fa-tree"></i></div>
+        <div class="biz-body">
+          <div class="biz-label">Carbon Offset Equiv.</div>
+          <div class="biz-value" id="biz-trees">—<span class="unit"> trees/yr</span></div>
+          <div class="biz-sub">annual CO₂ absorption equivalent</div>
+        </div>
+      </div>
+      <div class="biz-card">
+        <div class="biz-icon"><i class="fa-solid fa-chart-pie"></i></div>
+        <div class="biz-body">
+          <div class="biz-label">ESG Performance</div>
+          <div class="biz-value" id="biz-esg" style="font-size:14px;font-family:'Inter',sans-serif;">—</div>
+          <div class="biz-sub" id="biz-esg-sub">vs CBRE sustainability target</div>
         </div>
       </div>
     </div>
@@ -236,7 +315,7 @@
       <div class="chart-card-header">
         <div>
           <div class="section-title">7-Day Forecast</div>
-          <div class="section-subtitle">Estimated energy &amp; waste based on recent trends &mdash; projections, not guarantees</div>
+          <div class="section-subtitle">Estimated energy &amp; waste based on linear regression trends — projections, not guarantees</div>
         </div>
         <div class="forecast-legend">
           <span><span class="forecast-dot-inline" style="background:#3CA358"></span>Energy (kWh)</span>
@@ -244,13 +323,13 @@
         </div>
       </div>
       <div id="forecast-rows" class="forecast-grid">
-        <div class="loading-pulse" style="height:70px;"></div>
-        <div class="loading-pulse" style="height:70px;"></div>
-        <div class="loading-pulse" style="height:70px;"></div>
-        <div class="loading-pulse" style="height:70px;"></div>
-        <div class="loading-pulse" style="height:70px;"></div>
-        <div class="loading-pulse" style="height:70px;"></div>
-        <div class="loading-pulse" style="height:70px;"></div>
+        <div class="loading-pulse" style="height:72px;"></div>
+        <div class="loading-pulse" style="height:72px;"></div>
+        <div class="loading-pulse" style="height:72px;"></div>
+        <div class="loading-pulse" style="height:72px;"></div>
+        <div class="loading-pulse" style="height:72px;"></div>
+        <div class="loading-pulse" style="height:72px;"></div>
+        <div class="loading-pulse" style="height:72px;"></div>
       </div>
     </div>
 
@@ -270,8 +349,8 @@
           <div class="section-title">Smart Recommendations</div>
         </div>
         <div id="recs-list">
-          <div class="loading-pulse" style="height:56px;margin-bottom:10px;"></div>
-          <div class="loading-pulse" style="height:56px;"></div>
+          <div class="loading-pulse" style="height:58px;margin-bottom:10px;"></div>
+          <div class="loading-pulse" style="height:58px;"></div>
         </div>
       </div>
     </div>
@@ -283,11 +362,11 @@
         <span style="font-size:11.5px;color:var(--text-muted);font-weight:500;" id="portfolio-count">—</span>
       </div>
       <div class="portfolio-grid" id="portfolio-grid">
-        <div class="loading-pulse" style="height:200px;"></div>
-        <div class="loading-pulse" style="height:200px;"></div>
-        <div class="loading-pulse" style="height:200px;"></div>
-        <div class="loading-pulse" style="height:200px;"></div>
-        <div class="loading-pulse" style="height:200px;"></div>
+        <div class="loading-pulse" style="height:204px;"></div>
+        <div class="loading-pulse" style="height:204px;"></div>
+        <div class="loading-pulse" style="height:204px;"></div>
+        <div class="loading-pulse" style="height:204px;"></div>
+        <div class="loading-pulse" style="height:204px;"></div>
       </div>
     </div>
 
@@ -299,7 +378,7 @@
       <div class="footer-product">CBRE EcoManage</div>
       <div class="footer-tagline">Intelligent Sustainability for the Built World</div>
     </div>
-    <div class="footer-center">
+    <div style="text-align:center">
       <div class="footer-hackutd"><i class="fa-solid fa-trophy" style="margin-right:5px;"></i>Made for HackUTD 2024</div>
     </div>
     <div class="footer-right">
@@ -307,46 +386,39 @@
     </div>
   </footer>
 
-  <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="/static/dashboard.js"></script>
   <script>
-    // Dropdown toggle logic
+    // Dropdown logic
     function setupDropdown(btnId, panelId) {
       const btn = document.getElementById(btnId);
       const panel = document.getElementById(panelId);
       if (!btn || !panel) return;
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', e => {
         e.stopPropagation();
         const isOpen = panel.classList.toggle('open');
         btn.setAttribute('aria-expanded', isOpen);
-        // Close other dropdowns
-        document.querySelectorAll('.dropdown-panel').forEach(p => {
-          if (p !== panel) p.classList.remove('open');
-        });
+        document.querySelectorAll('.dropdown-panel').forEach(p => { if (p !== panel) p.classList.remove('open'); });
       });
     }
     setupDropdown('notif-btn', 'notif-panel');
     setupDropdown('profile-btn', 'profile-panel');
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.dropdown-panel').forEach(p => p.classList.remove('open'));
-    });
+    document.addEventListener('click', () => document.querySelectorAll('.dropdown-panel').forEach(p => p.classList.remove('open')));
 
-    // Subnav active state on scroll
-    const sections = document.querySelectorAll('[id]');
+    // Subnav active state
     const navLinks = document.querySelectorAll('.subnav-link[data-section]');
-    const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           navLinks.forEach(l => l.classList.remove('active'));
-          const match = document.querySelector(`.subnav-link[data-section="${entry.target.id}"]`);
-          if (match) match.classList.add('active');
+          const m = document.querySelector(`.subnav-link[data-section="${entry.target.id}"]`);
+          if (m) m.classList.add('active');
         }
       });
-    }, { threshold: 0.3 });
-    sections.forEach(s => {
+    }, { threshold: 0.25 });
+    document.querySelectorAll('[id]').forEach(s => {
       if (document.querySelector(`.subnav-link[data-section="${s.id}"]`)) observer.observe(s);
     });
   </script>

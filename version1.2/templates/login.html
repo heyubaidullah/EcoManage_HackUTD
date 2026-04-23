@@ -11,9 +11,11 @@
 <body class="login-page">
 
   <div class="login-header">
-    <img src="/static/images/CBRE_logo.png" alt="CBRE">
-    <span class="brand-divider" style="background:rgba(255,255,255,0.25)"></span>
-    <span class="app-name"><span class="eco" style="color:rgba(255,255,255,0.85)">Eco</span><span class="manage" style="color:#3CA358">Manage</span></span>
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <img src="/static/images/CBRE_logo.png" alt="CBRE">
+      <span class="brand-divider" style="background:rgba(255,255,255,0.25)"></span>
+      <span class="app-name"><span class="eco" style="color:rgba(255,255,255,0.82)">Eco</span><span class="manage" style="color:#3CA358">Manage</span></span>
+    </a>
   </div>
 
   <div class="login-center">
@@ -33,11 +35,13 @@
       <form class="login-form" id="login-form">
         <div class="form-row">
           <label class="form-label" for="email">Email address</label>
-          <input type="email" class="form-control" id="email" placeholder="john.murphy@cbre.com" autocomplete="username">
+          <input type="email" class="form-control" id="email"
+            placeholder="ubayd.joseph@cbre.com" autocomplete="username" value="ubayd.joseph@cbre.com">
         </div>
         <div class="form-row">
           <label class="form-label" for="password">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="••••••••" autocomplete="current-password">
+          <input type="password" class="form-control" id="password"
+            placeholder="••••••••" autocomplete="current-password" value="••••••••">
         </div>
         <a href="#" class="login-forgot">Forgot password?</a>
         <button type="submit" class="btn-login">
@@ -49,6 +53,9 @@
       <div class="login-note">
         <i class="fa-solid fa-shield-halved" style="color:var(--cbre-green);margin-right:4px;"></i>
         CBRE Single Sign-On &nbsp;·&nbsp; Secured by CBRE Identity Services
+        <br><span style="font-size:10.5px;color:var(--text-muted);margin-top:4px;display:inline-block;">
+          Demo mode: any credentials will sign you in
+        </span>
       </div>
 
     </div>
@@ -57,7 +64,9 @@
   <div class="login-footer">
     &copy; 2024 CBRE Group, Inc. All rights reserved.
     &nbsp;·&nbsp;
-    Built by <a href="https://www.dynelabs.org" target="_blank" rel="noopener">Dyne Labs</a> for HackUTD 2024
+    <i class="fa-solid fa-trophy" style="color:var(--cbre-green);font-size:9px;"></i> Made for HackUTD 2024
+    &nbsp;·&nbsp;
+    Built by <a href="https://www.dynelabs.org" target="_blank" rel="noopener">Dyne Labs</a>
   </div>
 
   <script>
@@ -66,7 +75,7 @@
       const btn = this.querySelector('.btn-login');
       btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Signing in…';
       btn.disabled = true;
-      setTimeout(() => { window.location.href = '/'; }, 1200);
+      setTimeout(() => { window.location.href = '/dashboard'; }, 1400);
     });
   </script>
 </body>

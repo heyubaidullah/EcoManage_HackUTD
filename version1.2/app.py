@@ -163,6 +163,10 @@ def seed_demo_data():
     db.session.commit()
 
 @app.route('/')
+def landing():
+    return render_template('landing.html')
+
+@app.route('/dashboard')
 def dashboard():
     return render_template('index.html')
 
