@@ -345,7 +345,7 @@ async function loadTrend(buildingId, days) {
         const { ctx, scales, chartArea } = chart;
         const xScale = scales.x;
         const boundaryIdx = lastHistLen - 1;
-        const xPos = xScale.getPixelForIndex(boundaryIdx);
+        const xPos = xScale.getPixelForValue(boundaryIdx);
 
         if (!xPos || isNaN(xPos)) return;
 
