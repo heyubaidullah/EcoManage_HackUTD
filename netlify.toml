@@ -1,13 +1,61 @@
 [build]
-  command   = "bash scripts/build-netlify.sh"
-  publish   = "dist"
+  command = "bash scripts/build-netlify.sh"
+  publish = "dist"
 
-[build.environment]
-  NODE_VERSION = "18"
+[functions]
+  directory    = "netlify/functions"
+  node_bundler = "esbuild"
 
+# ── Clean URL rewrites (serve .html files at clean paths) ─────────────────────
+[[redirects]]
+  from   = "/dashboard"
+  to     = "/dashboard.html"
+  status = 200
+
+[[redirects]]
+  from   = "/login"
+  to     = "/login.html"
+  status = 200
+
+[[redirects]]
+  from   = "/manage"
+  to     = "/manage.html"
+  status = 200
+
+[[redirects]]
+  from   = "/add-building"
+  to     = "/manage.html"
+  status = 200
+
+# ── API routes → Netlify Function ─────────────────────────────────────────────
+# The browser sends requests to /api/*, /buildings, /data/* as relative URLs.
+# Netlify intercepts them and routes to the serverless function.
+# The function receives the original path (e.g. /api/summary/1) in event.path.
+
+[[redirects]]
+  from   = "/api/*"
+  to     = "/.netlify/functions/api"
+  status = 200
+
+[[redirects]]
+  from   = "/buildings"
+  to     = "/.netlify/functions/api"
+  status = 200
+
+[[redirects]]
+  from   = "/buildings/*"
+  to     = "/.netlify/functions/api"
+  status = 200
+
+[[redirects]]
+  from   = "/data/*"
+  to     = "/.netlify/functions/api"
+  status = 200
+
+# ── Security headers ──────────────────────────────────────────────────────────
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options   = "DENY"
-    X-XSS-Protection  = "1; mode=block"
+    X-Frame-Options        = "DENY"
+    X-XSS-Protection       = "1; mode=block"
     X-Content-Type-Options = "nosniff"

@@ -1,0 +1,12 @@
+{
+  "name": "ecomanage",
+  "version": "1.2.0",
+  "description": "EcoManage — CBRE Sustainability Dashboard",
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

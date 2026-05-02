@@ -24,23 +24,21 @@ EcoManage is a full-stack sustainability intelligence platform that gives CBRE p
 - **Carbon Footprint Tracking** — Real-time CO₂e using EPA conversion factors
 - **7-Day Predictive Forecast** — Linear regression projections for energy & waste
 - **Smart Alerts** — Automated threshold breach detection per building
-- **AI Recommendations** — Context-aware, rule-based suggestions from 7-day rolling averages
+- **AI Recommendations** — Context-aware suggestions from 7-day rolling averages
 - **Business Impact Row** — Daily cost, monthly projections, carbon tree offsets, ESG status
-- **Portfolio Overview** — Visual grid of all properties with EcoScore badges
+- **Portfolio Overview** — Visual grid of all properties with color-coded EcoScore badges
 
 ---
 
 ## Tech Stack
 
-| Layer       | Technology                                    |
-|-------------|-----------------------------------------------|
-| Backend     | Python 3.12 / Flask                           |
-| Database    | PostgreSQL (Replit built-in / Supabase / local) |
-| ORM         | Flask-SQLAlchemy                              |
-| Frontend    | HTML5, CSS3, Vanilla JavaScript               |
-| Charts      | Chart.js 4.x                                  |
-| Icons       | Font Awesome 6.5                              |
-| Prod server | Gunicorn                                      |
+| Layer            | Replit / Local            | Netlify + Supabase                       |
+|------------------|---------------------------|------------------------------------------|
+| Frontend         | Flask (serves templates)  | Static HTML/CSS/JS on Netlify CDN        |
+| Backend / API    | Python Flask + Gunicorn   | Netlify Serverless Functions (JS)        |
+| Database         | PostgreSQL (built-in)     | Supabase PostgreSQL (free tier)          |
+| ORM / DB client  | Flask-SQLAlchemy          | @supabase/supabase-js                    |
+| Charts           | Chart.js 4.x              | Chart.js 4.x (unchanged)                |
 
 ---
 
@@ -49,200 +47,184 @@ EcoManage is a full-stack sustainability intelligence platform that gives CBRE p
 ```
 ecomanage/
 ├── version1.2/
-│   ├── app.py                  # Flask app — routes, API, EcoScore engine, seed logic
+│   ├── app.py                  # Flask app — routes, API, EcoScore engine, seed
 │   ├── models.py               # SQLAlchemy models (Building, DailyData)
-│   ├── requirements.txt        # Python dependencies (incl. gunicorn)
-│   ├── templates/
-│   │   ├── landing.html        # Public landing page  ( / )
-│   │   ├── index.html          # Main dashboard       ( /dashboard )
-│   │   ├── login.html          # Sign-in page         ( /login )
-│   │   └── manage.html         # Building manager     ( /manage )
-│   ├── static/
-│   │   ├── main.css            # CBRE-branded design system
-│   │   ├── dashboard.js        # Dashboard logic + Chart.js + EcoScore gauge
-│   │   ├── manage.js           # Building management page logic
-│   │   └── images/             # Building photography + logos
-│   └── data/
-│       └── schema.sql          # Database schema reference
+│   ├── requirements.txt        # Python dependencies
+│   ├── templates/              # HTML pages (zero Jinja2 vars — pure static HTML)
+│   │   ├── landing.html        #   /           → public landing page
+│   │   ├── index.html          #   /dashboard  → main dashboard
+│   │   ├── login.html          #   /login      → sign-in
+│   │   └── manage.html         #   /manage     → building manager
+│   └── static/
+│       ├── main.css            # CBRE-branded design system
+│       ├── dashboard.js        # Dashboard logic + Chart.js + EcoScore gauge
+│       ├── manage.js           # Building management page logic
+│       └── images/             # Building photography + logos
+│
+├── netlify/
+│   └── functions/
+│       └── api.js              # Serverless function — all API routes in one file
+│                               # Business logic ported 1-to-1 from app.py
+│
+├── supabase/
+│   └── schema.sql              # Run once in Supabase SQL Editor to create tables
 │
 ├── scripts/
-│   ├── build-netlify.sh        # Netlify static-site build script
+│   ├── build-netlify.sh        # Copies templates+static → dist/ for Netlify
+│   ├── seed-supabase.js        # Seeds 5 demo buildings + 90 days of data
 │   └── post-merge.sh           # Replit post-merge hook
 │
-├── netlify.toml                # Netlify build config
-├── render.yaml                 # Render.com service config
-├── Procfile                    # Heroku / Railway process file
-├── runtime.txt                 # Python version pin
-└── .env.example                # Environment variable template
+├── netlify.toml                # Netlify build config + redirect rules
+├── package.json                # Node deps for Netlify Function (@supabase/supabase-js)
+├── Procfile                    # Gunicorn start (Heroku / Railway compatible)
+├── render.yaml                 # Render.com config (optional alternative to Netlify)
+├── runtime.txt                 # Python 3.12 version pin
+└── .env.example                # Environment variable reference
 ```
 
 ---
 
 ## Environment Variables
 
-| Variable             | Required for              | Description                                                  |
-|----------------------|---------------------------|--------------------------------------------------------------|
-| `DATABASE_URL`       | All non-Replit deployments | PostgreSQL connection URI                                    |
-| `ECOMANAGE_API_URL`  | Netlify frontend only      | Public URL of your deployed Flask backend (e.g. Render.com) |
+| Variable                   | Used by                  | Where to get it                                              |
+|----------------------------|--------------------------|--------------------------------------------------------------|
+| `DATABASE_URL`             | Flask (Replit / local)   | Replit: auto-injected. Supabase: Settings → Database → URI  |
+| `SUPABASE_URL`             | Netlify Function         | Supabase: Settings → API → Project URL                      |
+| `SUPABASE_SERVICE_ROLE_KEY`| Netlify Function         | Supabase: Settings → API → service_role key (keep secret)   |
 
-> **Replit**: `DATABASE_URL` is injected automatically — no action needed.
+> **Replit**: `DATABASE_URL` is injected automatically — nothing to configure.
 
 ---
 
 ## Deployment Options
 
-### 1. Replit (current — already live)
+### Option 1 — Replit (current live deployment)
 
-The project runs as-is on Replit. No changes needed.
+No changes needed. The Flask app runs as-is.
 
-- **Run command**: `cd version1.2 && python app.py` (dev) or gunicorn (production)
-- **Database**: Replit's built-in PostgreSQL (auto-configured via `DATABASE_URL`)
-- **Live URL**: [ecomanage.dynelabs.org](https://ecomanage.dynelabs.org)
+- **Dev**: `cd version1.2 && python app.py`
+- **Production**: Gunicorn via `.replit` deploy config
+- **Database**: Replit built-in PostgreSQL (auto-configured)
+- **Live**: [ecomanage.dynelabs.org](https://ecomanage.dynelabs.org)
 
 ---
 
-### 2. Local Development
+### Option 2 — Local Development
 
-**Prerequisites:** Python 3.10+, PostgreSQL (or a free Supabase project)
+**Prerequisites**: Python 3.10+, PostgreSQL (local or Supabase)
 
 ```bash
-# 1. Clone the repo
+# 1. Clone
 git clone <your-repo-url>
-cd ecomanage
 
-# 2. Install dependencies
+# 2. Install Python dependencies
 pip install -r version1.2/requirements.txt
 
-# 3. Set your database URL
-#    Option A — local PostgreSQL:
+# 3. Set database URL (choose one)
 export DATABASE_URL=postgresql://postgres:password@localhost:5432/ecomanage
-
-#    Option B — Supabase (see Supabase setup below):
+# or Supabase:
 export DATABASE_URL=postgresql://postgres:[PASSWORD]@db.[REF].supabase.co:5432/postgres
 
-# 4. Run the app
+# 4. Run
 cd version1.2
 python app.py
 ```
 
-Open [http://localhost:5000](http://localhost:5000). On first run, the app creates tables and seeds 5 demo buildings with 90 days of data automatically.
+Open [http://localhost:5000](http://localhost:5000). On first run the app creates tables and seeds 5 demo buildings automatically.
 
 ---
 
-### 3. Free Cloud Deployment (Netlify + Render + Supabase)
+### Option 3 — Netlify + Supabase (free, no server required)
 
-This splits the app into:
+This is the recommended free deployment. Everything runs at $0/month.
 
 ```
-Netlify  (static HTML/CSS/JS)
-   ↓  API proxy via _redirects
-Render.com  (Flask backend, free tier)
-   ↓  DATABASE_URL
-Supabase  (PostgreSQL, free tier)
+Browser
+  ↓  static assets (CDN)
+Netlify
+  ↓  /api/*, /buildings, /data/* (serverless function)
+netlify/functions/api.js
+  ↓  SQL queries
+Supabase PostgreSQL
 ```
 
-All three services have generous free tiers — **$0/month**.
+#### Step 1 — Set up Supabase
 
----
+1. Sign up at [supabase.com](https://supabase.com) → **New project** (pick a region close to you)
+2. Wait ~2 min for provisioning
+3. Go to **SQL Editor → New query**, paste the contents of `supabase/schema.sql`, and click **Run**
+4. Go to **Settings → API** and copy:
+   - **Project URL** (looks like `https://xxxx.supabase.co`)
+   - **service_role** key (under "Project API keys" — the secret one)
 
-#### Step A — Set up Supabase (database)
+#### Step 2 — Seed demo data
 
-1. Sign up at [supabase.com](https://supabase.com) → **New project**
-2. Wait for provisioning (~2 min)
-3. Go to **Settings → Database → Connection string → URI**
-4. Copy the URI — it looks like:
-   ```
-   postgresql://postgres:[YOUR-PASSWORD]@db.xxxxxxxxxxxx.supabase.co:5432/postgres
-   ```
-5. Save this — you'll need it in Steps B and C.
+Run once from your local machine with Node.js 18+:
 
-> The Flask app will auto-create tables and seed demo data on first boot.
+```bash
+npm install   # installs @supabase/supabase-js
 
----
+SUPABASE_URL=https://xxxx.supabase.co \
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key \
+node scripts/seed-supabase.js
+```
 
-#### Step B — Deploy backend on Render.com
+This seeds 5 buildings with 90 days of realistic data. Use `--force` to wipe and re-seed.
 
-1. Sign up at [render.com](https://render.com) → **New → Web Service**
-2. Connect your GitHub repo
-3. Render will detect `render.yaml` automatically. Confirm:
-   - **Runtime**: Python
-   - **Build command**: `pip install -r version1.2/requirements.txt`
-   - **Start command**: `gunicorn --bind=0.0.0.0:$PORT --reuse-port --chdir=version1.2 app:app`
-4. Under **Environment → Environment Variables**, add:
-   ```
-   DATABASE_URL = postgresql://postgres:[PASSWORD]@db.[REF].supabase.co:5432/postgres
-   ```
-5. Click **Deploy**. After ~3 min, you'll get a URL like `https://ecomanage-api.onrender.com`.
-6. **Copy this URL** — you need it for Netlify.
-
-> **Free tier note**: Render free services spin down after 15 min of inactivity. The first request after a cold start may take ~30 s. Upgrade to Render Starter ($7/mo) for always-on.
-
----
-
-#### Step C — Deploy frontend on Netlify
+#### Step 3 — Deploy to Netlify
 
 1. Sign up at [netlify.com](https://netlify.com) → **Add new site → Import from Git**
-2. Connect your GitHub repo
+2. Connect your GitHub/GitLab repo
 3. Netlify detects `netlify.toml` automatically. Build settings:
    - **Build command**: `bash scripts/build-netlify.sh`
    - **Publish directory**: `dist`
 4. Under **Site → Environment variables**, add:
    ```
-   ECOMANAGE_API_URL = https://ecomanage-api.onrender.com
+   SUPABASE_URL              = https://xxxx.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY = your-service-role-key
    ```
-   *(replace with your actual Render URL from Step B)*
-5. Click **Deploy site**
+5. Click **Deploy site** — done in ~60 seconds
 
-Netlify will build the static site and configure API proxying automatically via `_redirects`. All browser requests to `/api/*`, `/buildings`, and `/data/*` are transparently forwarded to your Render backend — the frontend JavaScript requires no changes.
+Netlify's `[[redirects]]` in `netlify.toml` automatically route all API calls to `netlify/functions/api.js`. The frontend JavaScript requires zero changes — it still uses relative URLs (`/api/summary/1`, `/buildings`, etc.) and everything just works.
 
-6. Optionally, add a custom domain under **Domain management**.
+#### (Optional) Add a custom domain
 
----
-
-### 4. Railway (alternative to Render for the backend)
-
-1. Sign up at [railway.app](https://railway.app) → **New project → Deploy from GitHub**
-2. Connect your repo
-3. Railway will use the `Procfile`:
-   ```
-   web: gunicorn --bind=0.0.0.0:$PORT --reuse-port --chdir=version1.2 app:app
-   ```
-4. Add the `DATABASE_URL` environment variable (Supabase URI from Step A)
-5. Your app URL will be something like `https://ecomanage-api.up.railway.app`
-6. Use this URL as `ECOMANAGE_API_URL` in Netlify
+Netlify Dashboard → **Domain management** → Add custom domain → follow DNS instructions.
 
 ---
 
 ## How the Netlify Build Works
 
-`scripts/build-netlify.sh` does three things:
+`scripts/build-netlify.sh` does two things:
 
-1. **Copies** `version1.2/static/` → `dist/static/`
-2. **Copies and renames** Flask templates into `dist/` as plain HTML files:
-   - `landing.html` → `dist/index.html`
-   - `index.html` → `dist/dashboard.html`
-   - `login.html` → `dist/login.html`
-   - `manage.html` → `dist/manage.html`
-3. **Generates** `dist/_redirects` with:
-   - Clean URL rewrites (`/dashboard` → `dashboard.html`, etc.)
-   - API proxy rules pointing to `$ECOMANAGE_API_URL`
+1. Copies `version1.2/static/` → `dist/static/`
+2. Copies and renames Flask templates to plain HTML files:
 
-The templates use zero Jinja2 template variables — they are pure static HTML served by Flask. This means they work identically as static files on Netlify.
+| Flask template     | Netlify static file    | Clean URL    |
+|--------------------|------------------------|--------------|
+| `landing.html`     | `dist/index.html`      | `/`          |
+| `index.html`       | `dist/dashboard.html`  | `/dashboard` |
+| `login.html`       | `dist/login.html`      | `/login`     |
+| `manage.html`      | `dist/manage.html`     | `/manage`    |
+
+The clean URLs (`/dashboard`, `/login`, `/manage`) are handled by `netlify.toml` rewrites. API calls are routed to `netlify/functions/api.js` via the same redirect rules.
+
+The templates contain no Jinja2 template variables — they're pure static HTML that Flask happens to serve via `render_template()`. On Netlify, they're served directly as static files with identical results.
 
 ---
 
 ## API Reference
 
-| Method | Endpoint                    | Description                              |
-|--------|-----------------------------|------------------------------------------|
-| GET    | `/buildings`                | List all buildings                       |
-| POST   | `/buildings`                | Add a new building                       |
-| GET    | `/data/<id>?days=<n>`       | Historical daily data for a building     |
-| POST   | `/data/<id>`                | Log a daily data record                  |
-| GET    | `/api/summary/<id>`         | EcoScore, alerts, recommendations        |
-| GET    | `/api/portfolio`            | Portfolio overview (all buildings)       |
-| GET    | `/api/forecast/<id>`        | 7-day energy & waste forecast            |
-| GET    | `/api/alerts/<id>`          | Active alerts for a building             |
+| Method | Endpoint                | Description                           |
+|--------|-------------------------|---------------------------------------|
+| GET    | `/buildings`            | List all buildings                    |
+| POST   | `/buildings`            | Add a new building                    |
+| GET    | `/data/<id>?days=<n>`   | Historical daily data for a building  |
+| POST   | `/data/<id>`            | Log a daily data record               |
+| GET    | `/api/summary/<id>`     | EcoScore, carbon, alerts, recs        |
+| GET    | `/api/portfolio`        | Portfolio overview (all buildings)    |
+| GET    | `/api/forecast/<id>`    | 7-day energy & waste forecast         |
+| GET    | `/api/alerts/<id>`      | Active alerts for a building          |
 
 ---
 
