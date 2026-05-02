@@ -51,7 +51,7 @@ function toDateStr(d) { return d.toISOString().split('T')[0]; }
 
 async function seed() {
   const { count } = await sb
-    .from('buildings')
+    .from('em_buildings')
     .select('*', { count: 'exact', head: true });
 
   if (count > 0) {
@@ -60,8 +60,8 @@ async function seed() {
       process.exit(0);
     }
     console.log('--force: clearing existing data…');
-    await sb.from('daily_data').delete().neq('id', 0);
-    await sb.from('buildings').delete().neq('id', 0);
+    await sb.from('em_daily_data').delete().neq('id', 0);
+    await sb.from('em_buildings').delete().neq('id', 0);
   }
 
   const today = new Date();
@@ -71,7 +71,7 @@ async function seed() {
     console.log(`Seeding: ${info.name}`);
 
     const { data: building, error } = await sb
-      .from('buildings').insert(info).select().single();
+      .from('em_buildings').insert(info).select().single();
     if (error) { console.error(error); process.exit(1); }
 
     const baseEnergy = randBetween(120, 170);
@@ -101,7 +101,7 @@ async function seed() {
 
     // Insert in batches of 50 to stay within Supabase limits
     for (let i = 0; i < rows.length; i += 50) {
-      const { error: batchErr } = await sb.from('daily_data').insert(rows.slice(i, i + 50));
+      const { error: batchErr } = await sb.from('em_daily_data').insert(rows.slice(i, i + 50));
       if (batchErr) { console.error(batchErr); process.exit(1); }
     }
   }

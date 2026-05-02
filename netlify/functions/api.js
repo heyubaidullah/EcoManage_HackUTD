@@ -154,26 +154,26 @@ function round1(v)  { return Math.round(v * 10) / 10; }
 // ── Route Handlers ────────────────────────────────────────────────────────────
 
 async function getBuildings(sb) {
-  const { data, error } = await sb.from('buildings').select('*').order('id');
+  const { data, error } = await sb.from('em_buildings').select('*').order('id');
   if (error) throw error;
   return json(data.map(b => ({ id: b.id, name: b.name, address: b.address, image: BUILDING_IMAGES[b.name] ?? 'images/CBRE_Downtown.jpg' })));
 }
 
 async function addBuilding(sb, body) {
-  const { data, error } = await sb.from('buildings').insert({ name: body.name, address: body.address }).select().single();
+  const { data, error } = await sb.from('em_buildings').insert({ name: body.name, address: body.address }).select().single();
   if (error) throw error;
   return json({ message: 'Building added successfully!', id: data.id }, 201);
 }
 
 async function getDailyData(sb, buildingId, days) {
-  const { data, error } = await sb.from('daily_data').select('*')
+  const { data, error } = await sb.from('em_daily_data').select('*')
     .eq('building_id', buildingId).gte('date', daysAgo(days)).order('date');
   if (error) throw error;
   return json(data.map(d => ({ date: d.date, energy: d.energy, hvac: d.hvac, temperature: d.temperature, waste: d.waste })));
 }
 
 async function addDailyData(sb, buildingId, body) {
-  const { error } = await sb.from('daily_data').insert({
+  const { error } = await sb.from('em_daily_data').insert({
     building_id: buildingId, date: body.date,
     energy: body.energy, hvac: body.hvac, temperature: body.temperature, waste: body.waste,
   });
@@ -182,11 +182,11 @@ async function addDailyData(sb, buildingId, body) {
 }
 
 async function getSummary(sb, buildingId) {
-  const { data: latest, error } = await sb.from('daily_data').select('*')
+  const { data: latest, error } = await sb.from('em_daily_data').select('*')
     .eq('building_id', buildingId).order('date', { ascending: false }).limit(1).single();
   if (error) return json({ error: 'No data available' }, 404);
 
-  const { data: recent } = await sb.from('daily_data').select('*')
+  const { data: recent } = await sb.from('em_daily_data').select('*')
     .eq('building_id', buildingId).gte('date', daysAgo(7));
 
   const rec = recent ?? [latest];
@@ -210,13 +210,13 @@ async function getSummary(sb, buildingId) {
 }
 
 async function getPortfolio(sb) {
-  const { data: buildings } = await sb.from('buildings').select('*').order('id');
+  const { data: buildings } = await sb.from('em_buildings').select('*').order('id');
   const cutoff = daysAgo(7);
 
   const portfolio = await Promise.all((buildings ?? []).map(async b => {
-    const { data: recent } = await sb.from('daily_data').select('*')
+    const { data: recent } = await sb.from('em_daily_data').select('*')
       .eq('building_id', b.id).gte('date', cutoff).order('date', { ascending: false });
-    const { data: [last] = [] } = await sb.from('daily_data').select('*')
+    const { data: [last] = [] } = await sb.from('em_daily_data').select('*')
       .eq('building_id', b.id).order('date', { ascending: false }).limit(1);
 
     const base = { id: b.id, name: b.name, address: b.address, image: BUILDING_IMAGES[b.name] ?? 'images/CBRE_Downtown.jpg' };
@@ -243,7 +243,7 @@ async function getPortfolio(sb) {
 }
 
 async function getForecast(sb, buildingId) {
-  const { data: records } = await sb.from('daily_data').select('*')
+  const { data: records } = await sb.from('em_daily_data').select('*')
     .eq('building_id', buildingId).gte('date', daysAgo(30)).order('date');
 
   if (!records || records.length < 2) return json({ error: 'Not enough data to forecast' }, 400);
@@ -263,7 +263,7 @@ async function getForecast(sb, buildingId) {
 }
 
 async function getAlerts(sb, buildingId) {
-  const { data: [last] = [] } = await sb.from('daily_data').select('*')
+  const { data: [last] = [] } = await sb.from('em_daily_data').select('*')
     .eq('building_id', buildingId).order('date', { ascending: false }).limit(1);
   if (!last) return json([]);
   return json(generateAlerts(last.energy, last.hvac, last.temperature, last.waste));
