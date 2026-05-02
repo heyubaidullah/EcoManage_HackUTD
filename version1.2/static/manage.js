@@ -1,6 +1,6 @@
 /* EcoManage — manage.js */
 
-const API = '';
+const API = (typeof window !== 'undefined' && window.ECOMANAGE_API_BASE) ? window.ECOMANAGE_API_BASE : '';
 
 let buildings = [];
 
